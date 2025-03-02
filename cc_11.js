@@ -54,3 +54,63 @@ book1.updateCopies(-1);
 //Displays updated book details after borrowing
 //Expected output: "Title: The Great Gatsby, Author: F. Scott Fitzgerald, ISBN: 123456, Copies: 4"
 console.log(book1.getDetails());
+
+//Task 2 - Created Borrower Class
+
+//Class representing a borrower in the library system
+class Borrower {
+    
+    constructor(name, borrowerId) {
+        
+        //Stores the borrower's name
+        this.name = name; 
+        
+        //Assigns a unique borrower ID
+        this.borrowerId = borrowerId; 
+        
+        //Initializes an empty array to store borrowed books
+        this.borrowedBooks = []; 
+    }
+
+    //Method for borrowing a book
+    borrowBook(book) {
+        
+        //Ensures that the borrower does not borrow the same book multiple times
+        if (!this.borrowedBooks.includes(book)) {
+            this.borrowedBooks.push(book); 
+        } else {
+            console.log(`Error: Borrower already has "${book.title}".`);
+        }
+    }
+
+    //Method for returning a book
+    returnBook(book) {
+        
+        //Ensures that the borrower actually borrowed the book before returning it
+        if (this.borrowedBooks.includes(book)) {
+            
+            //Removes the returned book from the borrowed books list
+            this.borrowedBooks = this.borrowedBooks.filter(currentBook => currentBook.isbn !== book.isbn);
+        
+        } else {
+            console.log(`Error: Borrower did not borrow "${book.title}".`);
+        }
+    }
+}
+
+//Creates a borrower instance with name and unique borrower ID
+const borrower1 = new Borrower("Alice Johnson", 201);
+
+//Simulates borrowing a book by the borrower
+borrower1.borrowBook(book1);
+
+//Displays the list of books the borrower has borrowed
+//Expected output: ["The Great Gatsby"]
+console.log(borrower1.borrowedBooks.map(book => book.title));
+
+//Simulates returning the borrowed book
+borrower1.returnBook(book1);
+
+//Displays the updated borrowed books list after returning the book
+//Expected output: []
+console.log(borrower1.borrowedBooks.map(book => book.title));
