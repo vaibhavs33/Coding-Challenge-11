@@ -193,6 +193,21 @@ class Library {
         }
     }
 
+    //Task 5 - Implemented Book Returns
+
+    //Method to return a book to the library
+    returnBook(borrowerId, isbn) {
+        let existingBook = this.books.find(bookInLibrary => bookInLibrary.isbn === isbn);
+        let existingBorrower = this.borrowers.find(borrowerInLibrary => borrowerInLibrary.borrowerId === borrowerId);
+
+
+        if (existingBook && existingBorrower && existingBorrower.borrowedBooks.find(borrowedBook => borrowedBook.isbn === existingBook.isbn)) {
+            existingBook.updateCopies(1);
+            existingBorrower.returnBook(existingBook);
+        } else {
+            console.log("Error: Book not found in the borrower's records.");
+        }
+    }
 }
 
 const library = new Library();
@@ -216,4 +231,15 @@ console.log(book1.getDetails());
 
 //Displays borrower's list of borrowed books
 //Expected output: ["The Great Gatsby"]
+console.log(borrower1.borrowedBooks.map(book => book.title));
+
+//Returning the borrowed book
+library.returnBook(201, 123456);
+
+//Displays updated book details after returning
+//Expected output: "Title: The Great Gatsby, Author: F. Scott Fitzgerald, ISBN: 123456, Copies: 4"
+console.log(book1.getDetails());
+
+//Displays updated list of borrower's borrowed books
+//Expected output: []
 console.log(borrower1.borrowedBooks.map(book => book.title));
