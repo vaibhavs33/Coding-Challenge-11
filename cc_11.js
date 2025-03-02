@@ -160,6 +160,39 @@ class Library {
             console.log(`Error: Borrower with ID ${borrower.borrowerId} already exists.`);
         }
     }
+
+    //Task 4 - Implemented Book Borrowing
+
+    //Method to lend a book to a borrower
+    lendBook(borrowerId, isbn) {
+        
+        //Finds the book in the library
+        let existingBook = this.books.find(bookInLibrary => bookInLibrary.isbn === isbn);
+        
+        //Finds the borrower
+        let existingBorrower = this.borrowers.find(borrowerInLibrary => borrowerInLibrary.borrowerId === borrowerId);
+
+        if (existingBook) {
+            //Ensures book copies are available
+            if (existingBook.copies >= 1) {
+                if (existingBorrower) {
+                    if (!existingBorrower.borrowedBooks.find(borrowedBook => borrowedBook.isbn === existingBook.isbn)) {
+                        existingBook.updateCopies(-1);
+                        existingBorrower.borrowBook(existingBook);
+                    } else {
+                        console.log(`Error: Borrower already has "${existingBook.title}".`);
+                    }
+                } else {
+                    console.log("Error: Borrower not found.");
+                }
+            } else {
+                console.log("Error: No copies available for borrowing.");
+            }
+        } else {
+            console.log("Error: Book does not exist.");
+        }
+    }
+
 }
 
 const library = new Library();
@@ -173,3 +206,14 @@ library.listBooks();
 
 //Adds a borrower to the library
 library.addBorrower(borrower1);
+
+//Borrowing a book from the library
+library.lendBook(201, 123456);
+
+//Displays updated book details after borrowing
+//Expected output: "Title: The Great Gatsby, Author: F. Scott Fitzgerald, ISBN: 123456, Copies: 3"
+console.log(book1.getDetails());
+
+//Displays borrower's list of borrowed books
+//Expected output: ["The Great Gatsby"]
+console.log(borrower1.borrowedBooks.map(book => book.title));
