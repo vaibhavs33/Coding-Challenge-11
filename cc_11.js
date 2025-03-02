@@ -114,3 +114,62 @@ borrower1.returnBook(book1);
 //Displays the updated borrowed books list after returning the book
 //Expected output: []
 console.log(borrower1.borrowedBooks.map(book => book.title));
+
+//Task 3 - Created Library Class
+
+//Class representing the library system
+class Library {
+    
+    constructor() {
+        
+        //Initializes an empty array to store books
+        this.books = []; 
+        
+        //Initializes an empty array to store registered borrowers
+        this.borrowers = []; 
+    }
+
+    //Method to add a book to the library
+    addBook(book) {
+        
+        //Ensures that duplicate books with the same ISBN are not added
+        let existingBook = this.books.find(bookInLibrary => bookInLibrary.isbn === book.isbn);
+        
+        if (!existingBook) {
+            this.books.push(book);
+        } else {
+            console.log(`Error: Book with ISBN ${book.isbn} already exists.`);
+        }
+    }
+
+    //Method to list all books in the library
+    listBooks() {
+        
+        //Displays details of all books currently in the library
+        this.books.forEach(book => console.log(book.getDetails())); 
+    }
+
+    //Method to add a borrower to the library
+    addBorrower(borrower) {
+        //Ensures that duplicate borrowers with the same ID are not added
+        let existingBorrower = this.borrowers.find(borrowerInLibrary => borrowerInLibrary.borrowerId === borrower.borrowerId);
+        
+        if (!existingBorrower) {
+            this.borrowers.push(borrower);
+        } else {
+            console.log(`Error: Borrower with ID ${borrower.borrowerId} already exists.`);
+        }
+    }
+}
+
+const library = new Library();
+
+//Adds a book to the library
+library.addBook(book1);
+
+//Lists all books in the library
+//Expected output: "Title: The Great Gatsby, Author: F. Scott Fitzgerald, ISBN: 123456, Copies: 4"
+library.listBooks();
+
+//Adds a borrower to the library
+library.addBorrower(borrower1);
